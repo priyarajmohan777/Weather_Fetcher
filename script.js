@@ -7,17 +7,15 @@ async function getWeather() {
     return;
   }
 
-  let url = "https://wttr.in/" + cityName + "?format=%l+%t+%C";
+  let url = "https://wttr.in/" + cityName + "?format=j1";
 
   try {
     let response = await fetch(url);
-    let data = await response.text(); 
+    let data = await response.json();
 
-    let parts = data.split(" ");
-
-    let location = parts[0];
-    let temperature = parts[1];
-    let description = parts.slice(2).join(" "); 
+    let location = cityName;
+    let temperature = data.current_condition[0].temp_C + "°C";
+    let description = data.current_condition[0].weatherDesc[0].value;
 
     weatherBox.innerHTML = `
       <p><strong>Location:</strong> ${location}</p>
