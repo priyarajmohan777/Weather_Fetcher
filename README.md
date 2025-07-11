@@ -120,41 +120,37 @@ button:hover
 
 ## JavaScript Code:
 ```
-async function getWeather() 
-{
-  let cityInputBox = document.getElementById("cityInput")
-  let cityName = cityInputBox.value
+async function getWeather() {
+  let cityName = document.getElementById("cityInput").value;
+  let weatherBox = document.getElementById("weatherBox");
 
-  let weatherOutput = document.getElementById("weatherBox")
-
-  if (cityName === "") 
-  {
-    weatherOutput.textContent = "Enter a city first"
-    return
+  if (cityName === "") {
+    weatherBox.textContent = "Please enter a city name.";
+    return;
   }
 
-  let fullUrl = "https://wttr.in/" + cityName + "?format=j1"
+  let url = "https://wttr.in/" + cityName + "?format=%l+%t+%C";
 
-  try 
-  {
-    let response = await fetch(fullUrl)
-    let data = await response.json()
+  try {
+    let response = await fetch(url);
+    let data = await response.text(); 
 
-    let current = data.current_condition[0]
-    let area = data.nearest_area[0]
+    let parts = data.split(" ");
 
-    let temp = current.temp_C
-    let desc = current.weatherDesc[0].value
-    let place = area.areaName[0].value
+    let location = parts[0];
+    let temperature = parts[1];
+    let description = parts.slice(2).join(" "); 
 
-    weatherOutput.innerHTML = "Location: " + place + "<br>Temperature: " + temp + "°C<br>Description: " + desc
-  } 
-
-  catch (error) 
-  {
-    weatherOutput.textContent = "Could not fetch weather"
+    weatherBox.innerHTML = `
+      <p><strong>Location:</strong> ${location}</p>
+      <p><strong>Temperature:</strong> ${temperature}</p>
+      <p><strong>Description:</strong> ${description}</p>
+    `;
+  } catch (error) {
+    weatherBox.textContent = "Could not fetch weather. Try again.";
   }
 }
+
 
 ```
 
