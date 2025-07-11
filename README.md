@@ -1,5 +1,5 @@
 # Weather_Fetcher
-## Date:
+## Date: 11-07-2025
 ## Objective:
 To demonstrate how to use Promises and async/await in JavaScript by fetching and displaying live weather data from an API. This activity reinforces real-world async data handling in web applications.
 
@@ -31,10 +31,135 @@ Use await to wait for the response and parse it as JSON
 Use .catch() to handle any errors in the promise
 
 Display the temperature, description, and location in the output div
+
+
 ## HTML Code:
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <title>WeatherNow</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <h1>WeatherNow</h1>
+
+  <input type="text" id="cityInput" placeholder="Enter city name">
+
+  <button onclick="getWeather()">Check Weather</button>
+
+  <div id="weatherBox"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+```
+
 ## CSS Code:
+```
+body 
+{
+  background-color: #fef5fb;
+  font-family: Verdana, sans-serif;
+  text-align: center;
+  padding-top: 80px;
+}
+
+h1 
+{
+  font-size: 36px;
+  color: #b84bbf;
+}
+
+input 
+{
+  padding: 10px;
+  width: 250px;
+  font-size: 16px;
+  border: 2px solid #a8edc3;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  background-color: #fff0f6;
+  color: #3b3b3b;
+}
+
+button 
+{
+  padding: 10px 20px;
+  background-color: #d9f99d;
+  color: #2d2d2d;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+ 
+}
+
+button:hover 
+{
+  background-color: #c1f080;
+}
+
+#weatherBox 
+{
+  background-color: #f9e6ff;
+  border: 2px solid #b3ffc8;
+  padding: 25px;
+  width: 300px;
+  margin: 30px auto 0;
+  font-size: 18px;
+  color: #4b2e5e;
+  border-radius: 10px;
+  box-shadow: 0 0 12px #baffde88;
+}
+
+```
+
 ## JavaScript Code:
+```
+async function getWeather() 
+{
+  let cityInputBox = document.getElementById("cityInput")
+  let cityName = cityInputBox.value
+
+  let weatherOutput = document.getElementById("weatherBox")
+
+  if (cityName === "") 
+  {
+    weatherOutput.textContent = "Enter a city first"
+    return
+  }
+
+  let fullUrl = "https://wttr.in/" + cityName + "?format=j1"
+
+  try 
+  {
+    let response = await fetch(fullUrl)
+    let data = await response.json()
+
+    let current = data.current_condition[0]
+    let area = data.nearest_area[0]
+
+    let temp = current.temp_C
+    let desc = current.weatherDesc[0].value
+    let place = area.areaName[0].value
+
+    weatherOutput.innerHTML = "Location: " + place + "<br>Temperature: " + temp + "°C<br>Description: " + desc
+  } 
+
+  catch (error) 
+  {
+    weatherOutput.textContent = "Could not fetch weather"
+  }
+}
+
+```
+
 ## Output:
+<img width="1919" height="1005" alt="image" src="https://github.com/user-attachments/assets/56f60ef9-40c3-4555-b7be-b1ea666d0340" />
 
 ## Result:
 A mini module that successfully uses Promises and async/await to handle real-time API data, reinforcing asynchronous JavaScript patterns in a practical context.
