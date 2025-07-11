@@ -11,10 +11,19 @@ async function getWeather() {
 
   try {
     let response = await fetch(url);
-    let data = await response.text();
+    let data = await response.text(); 
 
-    // wttr.in returns plain text in this format: "CityName +Temperature +Condition"
-    weatherBox.innerHTML = `<strong>Weather:</strong><br>${data}`;
+    let parts = data.split(" ");
+
+    let location = parts[0];
+    let temperature = parts[1];
+    let description = parts.slice(2).join(" "); 
+
+    weatherBox.innerHTML = `
+      <p><strong>Location:</strong> ${location}</p>
+      <p><strong>Temperature:</strong> ${temperature}</p>
+      <p><strong>Description:</strong> ${description}</p>
+    `;
   } catch (error) {
     weatherBox.textContent = "Could not fetch weather. Try again.";
   }
